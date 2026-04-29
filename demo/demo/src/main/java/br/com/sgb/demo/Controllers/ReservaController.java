@@ -1,4 +1,4 @@
-package br.com.sgb.demo.Controllers;
+package br.com.sgb.demo.controllers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
