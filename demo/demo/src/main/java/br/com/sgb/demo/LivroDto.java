@@ -2,6 +2,7 @@ package br.com.sgb.demo;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class LivroDto {
@@ -25,17 +26,30 @@ public class LivroDto {
     @NotBlank(message = "O campo unidades é obrigatório")
     @Max(value = 1000, message = "O campo unidades deve ser no máximo 1000")
     private int unidades;
+    
+    @NotBlank(message = "O campo unidades disponíveis é obrigatório")
+    @Max(value = 1000, message = "O campo unidades disponíveis deve ser no máximo 1000")
+    private int unidadesDisponiveis;
+    
+    @NotNull(message = "O campo livro ativo é obrigatório")
+    private boolean livroAtivo;
+
+
 
     public LivroDto() {
     }   
 
-    public LivroDto(String isbn, String titulo, String autor, String genero, int unidades) {
+    public LivroDto(String isbn, String titulo, String autor, String genero, int unidades, int unidadesDisponiveis, boolean livroAtivo) {
         this.isbn = isbn;
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
         this.unidades = unidades;
+        this.unidadesDisponiveis = unidadesDisponiveis;
+        this.livroAtivo = livroAtivo;
     }
+
+    
     public String getIsbn() {
         return isbn;
     }
@@ -66,6 +80,28 @@ public class LivroDto {
     public void setUnidades(int unidades) {
         this.unidades = unidades;
     }
+
+
+    public int getUnidadesDisponiveis() {
+        return unidadesDisponiveis;
+    }
+
+
+    public void setUnidadesDisponiveis(int unidadesDisponiveis) {
+        this.unidadesDisponiveis = unidadesDisponiveis;
+    }
+
+
+    public boolean isLivroAtivo() {
+        return livroAtivo;
+    }
+
+
+    public void setLivroAtivo(boolean livroAtivo) {
+        this.livroAtivo = livroAtivo;
+    }
+
+    
 
 
 }
