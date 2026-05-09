@@ -1,6 +1,5 @@
 package br.com.sgb.demo.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -14,58 +13,54 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.sgb.demo.UsuarioDto;
+import br.com.sgb.demo.dtos.UsuarioDto;
+import br.com.sgb.demo.services.UsuarioService;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    private List<UsuarioDto> usuarios = new ArrayList<>();
+    private final UsuarioService usuarioService;
 
-    public UsuarioController() {
-        // Dados de exemplo
-        usuarios.add(new UsuarioDto(123456, "Takakara Nomuro", "taka@email.com", "12345678901", "senha123", 1, "Rua das Flores", "100", "01234-567", "Centro", "São Paulo", "SP", true));
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
     public ResponseEntity<List<UsuarioDto>> listarTodos() {
-        return ResponseEntity.ok(usuarios);
+        return ResponseEntity.ok(usuarioService.findAll());
     }
 
     @GetMapping("/{matricula}")
     public ResponseEntity<UsuarioDto> buscarPorMatricula(@PathVariable int matricula) {
-        return usuarios.stream()
-                .filter(u -> u.getMatricula() == matricula)
-                .findFirst()
+        return usuarioService.findByMatricula(matricula)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<UsuarioDto> criar(@Valid @RequestBody UsuarioDto usuarioDto) {
-        if (usuarios.stream().anyMatch(u -> u.getMatricula() == usuarioDto.getMatricula())) {
+        if (usuarioDto.getMatricula() != null && usuarioService.findByMatricula(usuarioDto.getMatricula()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        usuarios.add(usuarioDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuarioDto));
     }
 
     @PutMapping("/{matricula}")
     public ResponseEntity<UsuarioDto> atualizar(@PathVariable int matricula, @Valid @RequestBody UsuarioDto usuarioDto) {
-        for (int i = 0; i < usuarios.size(); i++) {
-            if (usuarios.get(i).getMatricula() == matricula) {
-                usuarioDto.setMatricula(matricula);
-                usuarios.set(i, usuarioDto);
-                return ResponseEntity.ok(usuarioDto);
-            }
+        if (usuarioService.findByMatricula(matricula).isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(usuarioService.update(matricula, usuarioDto));
     }
 
     @DeleteMapping("/{matricula}")
     public ResponseEntity<Void> deletar(@PathVariable int matricula) {
-        boolean removido = usuarios.removeIf(u -> u.getMatricula() == matricula);
-        return removido ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        if (usuarioService.findByMatricula(matricula).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        usuarioService.delete(matricula);
+        return ResponseEntity.noContent().build();
     }
 }

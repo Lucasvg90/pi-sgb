@@ -6,18 +6,18 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.sgb.demo.LivroDto;
+import br.com.sgb.demo.entities.Livro;
 
 @Repository
-public interface LivroRepository extends JpaRepository<LivroDto, String> {
-    
-    Optional<LivroDto> findByIsbn(String isbn);
-    
-    List<LivroDto> findByTituloContainingIgnoreCase(String titulo);
-    
-    List<LivroDto> findByAutorContainingIgnoreCase(String autor);
-    
-    List<LivroDto> findByGeneroContainingIgnoreCase(String genero);
-    
-    List<LivroDto> findByLivroAtivo(boolean livroAtivo);
-} 
+public interface LivroRepository extends JpaRepository<Livro, String> {
+
+    Optional<Livro> findByIsbn(String isbn);
+
+    List<Livro> findByTituloContainingIgnoreCase(String titulo);
+
+    List<Livro> findByAutorContainingIgnoreCase(String autor);
+
+    List<Livro> findByGeneroContainingIgnoreCase(String genero);
+
+    List<Livro> findByLivroAtivo(boolean livroAtivo);
+}

@@ -1,8 +1,7 @@
 package br.com.sgb.demo.controllers;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,57 +14,59 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.sgb.demo.ReservaDto;
+import br.com.sgb.demo.dtos.ReservaDto;
+import br.com.sgb.demo.services.ReservaService;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/reservas")
 public class ReservaController {
 
-    private List<ReservaDto> reservas = new ArrayList<>();
-    private int proximoId = 1;
+    private final ReservaService reservaService;
 
-    public ReservaController() {
-        // Dados de exemplo
-        reservas.add(new ReservaDto(1, 123456, "978-85-359-0277-5", LocalDate.now().plusDays(3), 1));
+    public ReservaController(ReservaService reservaService) {
+        this.reservaService = reservaService;
     }
 
     @GetMapping
     public ResponseEntity<List<ReservaDto>> listarTodos() {
-        return ResponseEntity.ok(reservas);
+        return ResponseEntity.ok(reservaService.findAll());
     }
 
     @GetMapping("/{idReserva}")
     public ResponseEntity<ReservaDto> buscarPorId(@PathVariable int idReserva) {
-        return reservas.stream()
-                .filter(r -> r.getIdReserva() == idReserva)
-                .findFirst()
+        return reservaService.findById(idReserva)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<ReservaDto> criar(@Valid @RequestBody ReservaDto reservaDto) {
-        reservaDto.setIdReserva(proximoId++);
-        reservas.add(reservaDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservaDto);
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(reservaService.save(reservaDto));
+        } catch (NoSuchElementException exception) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{idReserva}")
     public ResponseEntity<ReservaDto> atualizar(@PathVariable int idReserva, @Valid @RequestBody ReservaDto reservaDto) {
-        for (int i = 0; i < reservas.size(); i++) {
-            if (reservas.get(i).getIdReserva() == idReserva) {
-                reservaDto.setIdReserva(idReserva);
-                reservas.set(i, reservaDto);
-                return ResponseEntity.ok(reservaDto);
-            }
+        if (reservaService.findById(idReserva).isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        try {
+            return ResponseEntity.ok(reservaService.update(idReserva, reservaDto));
+        } catch (NoSuchElementException exception) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{idReserva}")
     public ResponseEntity<Void> deletar(@PathVariable int idReserva) {
-        boolean removido = reservas.removeIf(r -> r.getIdReserva() == idReserva);
-        return removido ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        if (reservaService.findById(idReserva).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        reservaService.delete(idReserva);
+        return ResponseEntity.noContent().build();
     }
 }

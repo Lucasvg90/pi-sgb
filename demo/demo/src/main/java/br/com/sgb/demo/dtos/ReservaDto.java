@@ -1,35 +1,27 @@
-package br.com.sgb.demo;
+package br.com.sgb.demo.dtos;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 public class ReservaDto {
 
-    
-    private int idReserva;
-    
-    @NotBlank
+    private Integer idReserva;
+
     @Min(value = 1, message = "O campo matrícula do usuário deve ser no mínimo 1")
     private int matriculaUsuario;
 
     @NotBlank
     private String isbnLivro;
 
-    @NotBlank
-    @Future(message = "Necessária uma data futura")
-    private LocalDate dataLimite;
+    private LocalDateTime dataLimite;
 
     @Positive
     private int estadoReserva;
 
-    
-    
-
-    public ReservaDto(int idReserva, int matriculaUsuario, String isbnLivro, LocalDate dataLimite, int estadoReserva) {
+    public ReservaDto(Integer idReserva, int matriculaUsuario, String isbnLivro, LocalDateTime dataLimite, int estadoReserva) {
         this.idReserva = idReserva;
         this.matriculaUsuario = matriculaUsuario;
         this.isbnLivro = isbnLivro;
@@ -40,19 +32,19 @@ public class ReservaDto {
     public ReservaDto() {
     }
 
-    public int getIdReserva() {
+    public Integer getIdReserva() {
         return idReserva;
     }
 
-    public void setIdReserva(int idReserva) {
+    public void setIdReserva(Integer idReserva) {
         this.idReserva = idReserva;
     }
 
-    public LocalDate getDataLimite() {
+    public LocalDateTime getDataLimite() {
         return dataLimite;
     }
 
-    public void setDataLimite(LocalDate dataLimite) {
+    public void setDataLimite(LocalDateTime dataLimite) {
         this.dataLimite = dataLimite;
     }
 
@@ -79,9 +71,5 @@ public class ReservaDto {
     public void setIsbnLivro(String isbnLivro) {
         this.isbnLivro = isbnLivro;
     }
-
-    
-
-    
 
 }

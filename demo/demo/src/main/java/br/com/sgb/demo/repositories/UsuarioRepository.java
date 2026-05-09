@@ -6,20 +6,20 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.sgb.demo.UsuarioDto;
+import br.com.sgb.demo.entities.Usuario;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<UsuarioDto, Integer> {
-    
-    Optional<UsuarioDto> findByMatricula(int matricula);
-    
-    Optional<UsuarioDto> findByCpf(String cpf);
-    
-    Optional<UsuarioDto> findByEmail(String email);
-    
-    List<UsuarioDto> findByNomeContainingIgnoreCase(String nome);
-    
-    List<UsuarioDto> findByAtivo(boolean ativo);
-    
-    List<UsuarioDto> findByFuncaoUsuario(int funcaoUsuario);
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+
+    Optional<Usuario> findByMatricula(int matricula);
+
+    Optional<Usuario> findByCpf(String cpf);
+
+    Optional<Usuario> findFirstByEmailIgnoreCase(String email);
+
+    List<Usuario> findByNomeContainingIgnoreCase(String nome);
+
+    List<Usuario> findByAtivo(boolean ativo);
+
+    List<Usuario> findByFuncaoUsuario(int funcaoUsuario);
 }

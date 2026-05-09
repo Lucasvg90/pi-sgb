@@ -1,44 +1,32 @@
-package br.com.sgb.demo;
+package br.com.sgb.demo.dtos;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-
 
 public class EmprestimoDto {
 
-    private int id;
+    private Integer id;
 
-    @NotBlank
     @Min(value = 1, message = "O campo matrícula do usuário deve ser no mínimo 1")
     private int matriculaUsuario;
-    
+
     @NotBlank
     private String isbnLivro;
-    
-    @NotNull
-	@PastOrPresent(message = "O campo data de início deve ser uma data passada ou presente")
-    private LocalDate data_inicio;
 
-    @NotNull
-    @Future(message = "O campo data de fim deve ser uma data futura")
-    private LocalDate data_fim;
+    private LocalDateTime data_inicio;
 
-   @NotNull
-   @Future(message = "O campo data de devolução deve ser uma data futura")
-   private LocalDate data_devolucao;
+    private LocalDateTime data_fim;
 
-   @NotNull
-   private boolean flagAtrasado;
+    private LocalDateTime data_devolucao;
+
+    private boolean flagAtrasado;
 
     public EmprestimoDto() {
     }
 
-    public EmprestimoDto(int id, int matriculaUsuario, String isbnLivro, LocalDate data_inicio, LocalDate data_fim, LocalDate data_devolucao, boolean flagAtrasado) {
+    public EmprestimoDto(Integer id, int matriculaUsuario, String isbnLivro, LocalDateTime data_inicio, LocalDateTime data_fim, LocalDateTime data_devolucao, boolean flagAtrasado) {
         this.id = id;
         this.matriculaUsuario = matriculaUsuario;
         this.isbnLivro = isbnLivro;
@@ -48,31 +36,38 @@ public class EmprestimoDto {
         this.flagAtrasado = flagAtrasado;
     }
 
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+
+    public void setId(Integer id) {
         this.id = id;
     }
-    public LocalDate getData_inicio() {
+
+    public LocalDateTime getData_inicio() {
         return data_inicio;
     }
-    public void setData_inicio(LocalDate data_inicio) {
+
+    public void setData_inicio(LocalDateTime data_inicio) {
         this.data_inicio = data_inicio;
     }
-    public LocalDate getData_fim() {
+
+    public LocalDateTime getData_fim() {
         return data_fim;
     }
-    public void setData_fim(LocalDate data_fim) {
+
+    public void setData_fim(LocalDateTime data_fim) {
         this.data_fim = data_fim;
     }
-    public LocalDate getData_devolucao() {
+
+    public LocalDateTime getData_devolucao() {
         return data_devolucao;
     }
-    public void setData_devolucao(LocalDate data_devolucao) {
+
+    public void setData_devolucao(LocalDateTime data_devolucao) {
         this.data_devolucao = data_devolucao;
     }
+
     public boolean isFlagAtrasado() {
         return flagAtrasado;
     }
@@ -96,10 +91,5 @@ public class EmprestimoDto {
     public void setFlagAtrasado(boolean flagAtrasado) {
         this.flagAtrasado = flagAtrasado;
     }
-
-    
-    
-
-
 
 }

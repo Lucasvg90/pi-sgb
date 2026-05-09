@@ -1,39 +1,35 @@
-package br.com.sgb.demo;
+package br.com.sgb.demo.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class UsuarioDto {
 
-
-    @NotBlank(message = "O campo matrícula é obrigatório")
+    @Min(value = 1, message = "O campo matrícula deve ser maior que zero")
     @Max(value = 999999, message = "O campo matrícula deve ser no máximo 6 dígitos")
-    private int matricula;
-
+    private Integer matricula;
 
     @NotBlank(message = "O campo nome é obrigatório")
-    @Size(min = 2, max = 100, message = "O campo nome deve conter entre 2 e 100 caracteres")
+    @Size(min = 2, max = 500, message = "O campo nome deve conter entre 2 e 500 caracteres")
     private String nome;
-
 
     @NotBlank(message = "O campo email é obrigatório")
     @Email(message = "O campo email deve ser um endereço de email válido")
     private String email;
 
     @NotBlank(message = "O campo cpf é obrigatório")
-    @Size(min = 11, max = 11, message = "O campo cpf deve ter 11 dígitos")
-    @Pattern(regexp = "\\d{11}", message = "O campo cpf deve conter apenas números")
+    @Size(min = 11, max = 30, message = "O campo cpf deve conter entre 11 e 30 caracteres")
+    @Pattern(regexp = "(\\d{11}|\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2})", message = "O campo cpf deve estar no formato 00000000000 ou 000.000.000-00")
     private String cpf;
 
     @NotBlank(message = "O campo senha é obrigatório")
-    @Size(min = 6, max = 50, message = "O campo senha deve conter entre 6 e 50 caracteres")
+    @Size(min = 6, max = 500, message = "O campo senha deve conter entre 6 e 500 caracteres")
     private String senha;
-
-    @NotBlank(message = "O campo função do usuário é obrigatório")
+    @Min(value = 1, message = "O campo função do usuário deve ser no mínimo 1")
     @Max(value = 3, message = "O campo função do usuário deve ser no máximo 3")
     private int funcao_usuario;
 
@@ -46,31 +42,29 @@ public class UsuarioDto {
     private String numero;
 
     @NotBlank(message = "O campo CEP é obrigatório")
-    @Size(min = 8, max = 8, message = "O campo CEP deve ter 8 caracteres")
+    @Size(min = 8, max = 12, message = "O campo CEP deve ter entre 8 e 12 caracteres")
+    @Pattern(regexp = "\\d{5}-?\\d{3}", message = "O campo CEP deve estar no formato 00000000 ou 00000-000")
     private String cep;
 
     @NotBlank(message = "O campo bairro é obrigatório")
-    @Size(min = 2, max = 200, message = "O campo bairro deve conter entre 2 e 200 caracteres")
+    @Size(min = 2, max = 100, message = "O campo bairro deve conter entre 2 e 100 caracteres")
     private String bairro;
 
     @NotBlank(message = "O campo cidade é obrigatório")
-    @Size(min = 2, max = 200, message = "O campo cidade deve conter entre 2 e 200 caracteres")
+    @Size(min = 2, max = 100, message = "O campo cidade deve conter entre 2 e 100 caracteres")
     private String cidade;
 
     @NotBlank(message = "O campo estado é obrigatório")
     @Size(min = 2, max = 4, message = "O campo estado deve conter entre 2 e 4 caracteres")
     private String estado;
-
-    @NotNull(message = "O campo ativo é obrigatório")
     private boolean ativo;
-    
-    // Mudar para endereço completo depois;
 
+    // Mudar para endereço completo depois;
     public UsuarioDto() {
     }
 
     public UsuarioDto(
-            int matricula,
+            Integer matricula,
             String nome,
             String email,
             String cpf,
@@ -99,14 +93,11 @@ public class UsuarioDto {
         this.ativo = ativo;
     }
 
-
-
-
-    public int getMatricula() {
+    public Integer getMatricula() {
         return matricula;
     }
 
-    public void setMatricula(int matricula) {
+    public void setMatricula(Integer matricula) {
         this.matricula = matricula;
     }
 
@@ -154,84 +145,56 @@ public class UsuarioDto {
         return rua;
     }
 
-
-
     public void setRua(String rua) {
         this.rua = rua;
     }
-
-
 
     public String getNumero() {
         return numero;
     }
 
-
-
     public void setNumero(String numero) {
         this.numero = numero;
     }
-
-
 
     public String getCep() {
         return cep;
     }
 
-
-
     public void setCep(String cep) {
         this.cep = cep;
     }
-
-
 
     public String getBairro() {
         return bairro;
     }
 
-
-
     public void setBairro(String bairro) {
         this.bairro = bairro;
     }
-
-
 
     public String getCidade() {
         return cidade;
     }
 
-
-
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
-
-
 
     public String getEstado() {
         return estado;
     }
 
-
-
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
-
 
     public boolean isAtivo() {
         return ativo;
     }
 
-
-
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-
-    
 
 }
