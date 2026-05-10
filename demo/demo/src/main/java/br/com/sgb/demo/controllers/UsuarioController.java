@@ -41,9 +41,6 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioDto> criar(@Valid @RequestBody UsuarioDto usuarioDto) {
-        if (usuarioDto.getMatricula() != null && usuarioService.findByMatricula(usuarioDto.getMatricula()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuarioDto));
     }
 
@@ -57,9 +54,6 @@ public class UsuarioController {
 
     @DeleteMapping("/{matricula}")
     public ResponseEntity<Void> deletar(@PathVariable int matricula) {
-        if (usuarioService.findByMatricula(matricula).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         usuarioService.delete(matricula);
         return ResponseEntity.noContent().build();
     }

@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.sgb.demo.dtos.UsuarioDto;
 import br.com.sgb.demo.entities.Usuario;
@@ -20,47 +21,92 @@ public class UsuarioService {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
     public List<UsuarioDto> findAll() {
         return repository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public Optional<UsuarioDto> findByMatricula(int matricula) {
         return repository.findByMatricula(matricula).map(this::toDto);
     }
 
+    @Transactional(readOnly = true)
     public Optional<UsuarioDto> findByCpf(String cpf) {
         return repository.findByCpf(cpf).map(this::toDto);
     }
 
+    @Transactional(readOnly = true)
     public Optional<UsuarioDto> findByEmail(String email) {
-        return repository.findFirstByEmailIgnoreCase(email).map(this::toDto);
+        return repository.findByEmailIgnoreCase(email).map(this::toDto);
     }
 
+    @Transactional(readOnly = true)
     public List<UsuarioDto> findByNomeContaining(String nome) {
         return repository.findByNomeContainingIgnoreCase(nome).stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<UsuarioDto> findByAtivo(boolean ativo) {
         return repository.findByAtivo(ativo).stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<UsuarioDto> findByFuncaoUsuario(int funcao) {
         return repository.findByFuncaoUsuario(funcao).stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    @Transactional
     public UsuarioDto save(UsuarioDto dto) {
-        return toDto(repository.save(toEntity(dto)));
+        validarDuplicidade(dto, null);
+        Usuario entity = new Usuario();
+        preencherCampos(entity, dto);
+        entity.setSenha(gerarSenhaInicial(dto.getCpf()));
+        return toDto(repository.save(entity));
     }
 
+    @Transactional
     public UsuarioDto update(int matricula, UsuarioDto dto) {
-        repository.findByMatricula(matricula)
-                .orElseThrow(() -> new NoSuchElementException("Usuario nao encontrado"));
-        dto.setMatricula(matricula);
-        return toDto(repository.save(toEntity(dto)));
+        Usuario entity = repository.findByMatricula(matricula)
+                .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
+        validarDuplicidade(dto, matricula);
+        preencherCampos(entity, dto);
+        return toDto(repository.save(entity));
     }
 
+    @Transactional
     public void delete(int matricula) {
-        repository.deleteById(matricula);
+        Usuario entity = repository.findByMatricula(matricula)
+                .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado"));
+        repository.delete(entity);
+    }
+
+    private void validarDuplicidade(UsuarioDto dto, Integer matriculaAtual) {
+        repository.findByEmailIgnoreCase(dto.getEmail())
+                .filter(usuario -> matriculaAtual == null || !usuario.getMatricula().equals(matriculaAtual))
+                .ifPresent(usuario -> {
+                    throw new IllegalStateException("Já existe um usuário com este email");
+                });
+
+        repository.findByCpf(dto.getCpf())
+                .filter(usuario -> matriculaAtual == null || !usuario.getMatricula().equals(matriculaAtual))
+                .ifPresent(usuario -> {
+                    throw new IllegalStateException("Já existe um usuário com este CPF");
+                });
+    }
+
+    private void preencherCampos(Usuario entity, UsuarioDto dto) {
+        entity.setNome(dto.getNome());
+        entity.setEmail(dto.getEmail());
+        entity.setCpf(dto.getCpf());
+        entity.setTelefone(dto.getTelefone());
+        entity.setFuncaoUsuario(dto.getFuncaoUsuario());
+        entity.setAtivo(dto.isAtivo());
+    }
+
+    private String gerarSenhaInicial(String cpf) {
+        String cpfNumerico = cpf.replaceAll("\\D", "");
+        return cpfNumerico.isBlank() ? "123456" : cpfNumerico;
     }
 
     private UsuarioDto toDto(Usuario entity) {
@@ -69,34 +115,8 @@ public class UsuarioService {
                 entity.getNome(),
                 entity.getEmail(),
                 entity.getCpf(),
-                entity.getSenha(),
+                entity.getTelefone(),
                 entity.getFuncaoUsuario(),
-                entity.getRua(),
-                entity.getNumero(),
-                entity.getCep(),
-                entity.getBairro(),
-                entity.getCidade(),
-                entity.getEstado(),
                 entity.isAtivo());
-    }
-
-    private Usuario toEntity(UsuarioDto dto) {
-        Usuario entity = new Usuario();
-        if (dto.getMatricula() != null && dto.getMatricula() > 0) {
-            entity.setMatricula(dto.getMatricula());
-        }
-        entity.setNome(dto.getNome());
-        entity.setEmail(dto.getEmail());
-        entity.setCpf(dto.getCpf());
-        entity.setSenha(dto.getSenha());
-        entity.setFuncaoUsuario(dto.getFuncao_usuario());
-        entity.setRua(dto.getRua());
-        entity.setNumero(dto.getNumero());
-        entity.setCep(dto.getCep());
-        entity.setBairro(dto.getBairro());
-        entity.setCidade(dto.getCidade());
-        entity.setEstado(dto.getEstado());
-        entity.setAtivo(dto.isAtivo());
-        return entity;
     }
 }

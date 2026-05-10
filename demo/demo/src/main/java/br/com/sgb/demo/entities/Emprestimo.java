@@ -38,9 +38,6 @@ public class Emprestimo {
     @Column(name = "data_devolucao")
     private LocalDateTime dataDevolucao;
 
-    @Column(name = "flag_atrasado", nullable = false)
-    private boolean flagAtrasado;
-
     public Integer getId() {
         return id;
     }
@@ -87,13 +84,5 @@ public class Emprestimo {
 
     public void setDataDevolucao(LocalDateTime dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
-    }
-
-    public boolean isFlagAtrasado() {
-        return flagAtrasado;
-    }
-
-    public void setFlagAtrasado(boolean flagAtrasado) {
-        this.flagAtrasado = flagAtrasado;
     }
 }

@@ -15,11 +15,17 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> findByCpf(String cpf);
 
-    Optional<Usuario> findFirstByEmailIgnoreCase(String email);
+    Optional<Usuario> findByEmailIgnoreCase(String email);
+
+    Optional<Usuario> findByEmailIgnoreCaseAndAtivoTrue(String email);
 
     List<Usuario> findByNomeContainingIgnoreCase(String nome);
 
     List<Usuario> findByAtivo(boolean ativo);
 
     List<Usuario> findByFuncaoUsuario(int funcaoUsuario);
+
+    boolean existsByEmailIgnoreCase(String email);
+
+    boolean existsByCpf(String cpf);
 }

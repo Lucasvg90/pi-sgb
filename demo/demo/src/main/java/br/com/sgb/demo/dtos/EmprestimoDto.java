@@ -15,25 +15,36 @@ public class EmprestimoDto {
     @NotBlank
     private String isbnLivro;
 
-    private LocalDateTime data_inicio;
+    private LocalDateTime dataInicio;
 
-    private LocalDateTime data_fim;
+    private LocalDateTime dataFim;
 
-    private LocalDateTime data_devolucao;
+    private LocalDateTime dataDevolucao;
 
-    private boolean flagAtrasado;
+    private String status;
+
+    private Double multa;
 
     public EmprestimoDto() {
     }
 
-    public EmprestimoDto(Integer id, int matriculaUsuario, String isbnLivro, LocalDateTime data_inicio, LocalDateTime data_fim, LocalDateTime data_devolucao, boolean flagAtrasado) {
+    public EmprestimoDto(
+            Integer id,
+            int matriculaUsuario,
+            String isbnLivro,
+            LocalDateTime dataInicio,
+            LocalDateTime dataFim,
+            LocalDateTime dataDevolucao,
+            String status,
+            Double multa) {
         this.id = id;
         this.matriculaUsuario = matriculaUsuario;
         this.isbnLivro = isbnLivro;
-        this.data_inicio = data_inicio;
-        this.data_fim = data_fim;
-        this.data_devolucao = data_devolucao;
-        this.flagAtrasado = flagAtrasado;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.dataDevolucao = dataDevolucao;
+        this.status = status;
+        this.multa = multa;
     }
 
     public Integer getId() {
@@ -44,32 +55,44 @@ public class EmprestimoDto {
         this.id = id;
     }
 
-    public LocalDateTime getData_inicio() {
-        return data_inicio;
+    public LocalDateTime getDataInicio() {
+        return dataInicio;
     }
 
-    public void setData_inicio(LocalDateTime data_inicio) {
-        this.data_inicio = data_inicio;
+    public void setDataInicio(LocalDateTime dataInicio) {
+        this.dataInicio = dataInicio;
     }
 
-    public LocalDateTime getData_fim() {
-        return data_fim;
+    public LocalDateTime getDataFim() {
+        return dataFim;
     }
 
-    public void setData_fim(LocalDateTime data_fim) {
-        this.data_fim = data_fim;
+    public void setDataFim(LocalDateTime dataFim) {
+        this.dataFim = dataFim;
     }
 
-    public LocalDateTime getData_devolucao() {
-        return data_devolucao;
+    public LocalDateTime getDataDevolucao() {
+        return dataDevolucao;
     }
 
-    public void setData_devolucao(LocalDateTime data_devolucao) {
-        this.data_devolucao = data_devolucao;
+    public void setDataDevolucao(LocalDateTime dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
     }
 
-    public boolean isFlagAtrasado() {
-        return flagAtrasado;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Double getMulta() {
+        return multa;
+    }
+
+    public void setMulta(Double multa) {
+        this.multa = multa;
     }
 
     public int getMatriculaUsuario() {
@@ -87,9 +110,4 @@ public class EmprestimoDto {
     public void setIsbnLivro(String isbnLivro) {
         this.isbnLivro = isbnLivro;
     }
-
-    public void setFlagAtrasado(boolean flagAtrasado) {
-        this.flagAtrasado = flagAtrasado;
-    }
-
 }

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 
 public class ReservaDto {
 
@@ -16,17 +15,25 @@ public class ReservaDto {
     @NotBlank
     private String isbnLivro;
 
-    private LocalDateTime dataLimite;
+    private LocalDateTime dataReserva;
 
-    @Positive
-    private int estadoReserva;
+    private String statusReserva;
 
-    public ReservaDto(Integer idReserva, int matriculaUsuario, String isbnLivro, LocalDateTime dataLimite, int estadoReserva) {
+    private Integer posicao;
+
+    public ReservaDto(
+            Integer idReserva,
+            int matriculaUsuario,
+            String isbnLivro,
+            LocalDateTime dataReserva,
+            String statusReserva,
+            Integer posicao) {
         this.idReserva = idReserva;
         this.matriculaUsuario = matriculaUsuario;
         this.isbnLivro = isbnLivro;
-        this.dataLimite = dataLimite;
-        this.estadoReserva = estadoReserva;
+        this.dataReserva = dataReserva;
+        this.statusReserva = statusReserva;
+        this.posicao = posicao;
     }
 
     public ReservaDto() {
@@ -40,20 +47,20 @@ public class ReservaDto {
         this.idReserva = idReserva;
     }
 
-    public LocalDateTime getDataLimite() {
-        return dataLimite;
+    public LocalDateTime getDataReserva() {
+        return dataReserva;
     }
 
-    public void setDataLimite(LocalDateTime dataLimite) {
-        this.dataLimite = dataLimite;
+    public void setDataReserva(LocalDateTime dataReserva) {
+        this.dataReserva = dataReserva;
     }
 
-    public int getEstadoReserva() {
-        return estadoReserva;
+    public String getStatusReserva() {
+        return statusReserva;
     }
 
-    public void setEstadoReserva(int estadoReserva) {
-        this.estadoReserva = estadoReserva;
+    public void setStatusReserva(String statusReserva) {
+        this.statusReserva = statusReserva;
     }
 
     public int getMatriculaUsuario() {
@@ -72,4 +79,11 @@ public class ReservaDto {
         this.isbnLivro = isbnLivro;
     }
 
+    public Integer getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(Integer posicao) {
+        this.posicao = posicao;
+    }
 }

@@ -15,7 +15,7 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Integer>
 
     List<Emprestimo> findByLivroIsbn(String isbnLivro);
 
-    List<Emprestimo> findByFlagAtrasado(boolean flagAtrasado);
+    boolean existsByLivroIsbnAndDataDevolucaoIsNull(String isbnLivro);
 
     List<Emprestimo> findByUsuarioMatriculaAndLivroIsbn(int matriculaUsuario, String isbnLivro);
 

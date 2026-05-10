@@ -1,15 +1,14 @@
 package br.com.sgb.demo.controllers;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +28,10 @@ public class ReservaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservaDto>> listarTodos() {
+    public ResponseEntity<List<ReservaDto>> listarTodos(@RequestParam(required = false) Integer matriculaUsuario) {
+        if (matriculaUsuario != null) {
+            return ResponseEntity.ok(reservaService.findByMatriculaUsuario(matriculaUsuario));
+        }
         return ResponseEntity.ok(reservaService.findAll());
     }
 
@@ -42,31 +44,11 @@ public class ReservaController {
 
     @PostMapping
     public ResponseEntity<ReservaDto> criar(@Valid @RequestBody ReservaDto reservaDto) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(reservaService.save(reservaDto));
-        } catch (NoSuchElementException exception) {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservaService.save(reservaDto));
     }
 
-    @PutMapping("/{idReserva}")
-    public ResponseEntity<ReservaDto> atualizar(@PathVariable int idReserva, @Valid @RequestBody ReservaDto reservaDto) {
-        if (reservaService.findById(idReserva).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        try {
-            return ResponseEntity.ok(reservaService.update(idReserva, reservaDto));
-        } catch (NoSuchElementException exception) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/{idReserva}")
-    public ResponseEntity<Void> deletar(@PathVariable int idReserva) {
-        if (reservaService.findById(idReserva).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        reservaService.delete(idReserva);
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/{idReserva}/cancelamento")
+    public ResponseEntity<ReservaDto> cancelar(@PathVariable int idReserva) {
+        return ResponseEntity.ok(reservaService.cancelar(idReserva));
     }
 }

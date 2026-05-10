@@ -29,11 +29,11 @@ public class Reserva {
     @JoinColumn(name = "isbn_fk", referencedColumnName = "isbn_pk", nullable = false)
     private Livro livro;
 
-    @Column(name = "data_limite_emprestimo")
-    private LocalDateTime dataLimite;
+    @Column(name = "data_reserva", nullable = false)
+    private LocalDateTime dataReserva;
 
-    @Column(name = "estado_reserva", nullable = false)
-    private Integer estadoReserva;
+    @Column(name = "status_reserva", nullable = false, length = 20)
+    private String statusReserva;
 
     public Integer getIdReserva() {
         return idReserva;
@@ -59,19 +59,19 @@ public class Reserva {
         this.livro = livro;
     }
 
-    public LocalDateTime getDataLimite() {
-        return dataLimite;
+    public LocalDateTime getDataReserva() {
+        return dataReserva;
     }
 
-    public void setDataLimite(LocalDateTime dataLimite) {
-        this.dataLimite = dataLimite;
+    public void setDataReserva(LocalDateTime dataReserva) {
+        this.dataReserva = dataReserva;
     }
 
-    public Integer getEstadoReserva() {
-        return estadoReserva;
+    public String getStatusReserva() {
+        return statusReserva;
     }
 
-    public void setEstadoReserva(Integer estadoReserva) {
-        this.estadoReserva = estadoReserva;
+    public void setStatusReserva(String statusReserva) {
+        this.statusReserva = statusReserva;
     }
 }

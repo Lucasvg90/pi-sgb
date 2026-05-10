@@ -41,25 +41,16 @@ public class LivroController {
 
     @PostMapping
     public ResponseEntity<LivroDto> criar(@Valid @RequestBody LivroDto livroDto) {
-        if (livroService.findByIsbn(livroDto.getIsbn()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
         return ResponseEntity.status(HttpStatus.CREATED).body(livroService.save(livroDto));
     }
 
     @PutMapping("/{isbn}")
     public ResponseEntity<LivroDto> atualizar(@PathVariable String isbn, @Valid @RequestBody LivroDto livroDto) {
-        if (livroService.findByIsbn(isbn).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(livroService.update(isbn, livroDto));
     }
 
     @DeleteMapping("/{isbn}")
     public ResponseEntity<Void> deletar(@PathVariable String isbn) {
-        if (livroService.findByIsbn(isbn).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         livroService.delete(isbn);
         return ResponseEntity.noContent().build();
     }

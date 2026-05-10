@@ -22,6 +22,11 @@ public class LivroDto {
     @NotBlank(message = "O campo gênero é obrigatório")
     @Size(min = 2, max = 100, message = "O campo gênero deve conter entre 2 e 100 caracteres")
     private String genero;
+
+    @Min(value = 0, message = "O campo ano de publicação deve ser no mínimo 0")
+    @Max(value = 9999, message = "O campo ano de publicação deve ser no máximo 9999")
+    private int anoPublicacao;
+
     @Min(value = 0, message = "O campo unidades deve ser no mínimo 0")
     @Max(value = 1000, message = "O campo unidades deve ser no máximo 1000")
     private int unidades;
@@ -30,19 +35,28 @@ public class LivroDto {
     @Max(value = 1000, message = "O campo unidades disponíveis deve ser no máximo 1000")
     private int unidadesDisponiveis;
 
-    private boolean livroAtivo;
+    private String status;
 
     public LivroDto() {
     }
 
-    public LivroDto(String isbn, String titulo, String autor, String genero, int unidades, int unidadesDisponiveis, boolean livroAtivo) {
+    public LivroDto(
+            String isbn,
+            String titulo,
+            String autor,
+            String genero,
+            int anoPublicacao,
+            int unidades,
+            int unidadesDisponiveis,
+            String status) {
         this.isbn = isbn;
         this.titulo = titulo;
         this.autor = autor;
         this.genero = genero;
+        this.anoPublicacao = anoPublicacao;
         this.unidades = unidades;
         this.unidadesDisponiveis = unidadesDisponiveis;
-        this.livroAtivo = livroAtivo;
+        this.status = status;
     }
 
     public String getIsbn() {
@@ -77,6 +91,14 @@ public class LivroDto {
         this.genero = genero;
     }
 
+    public int getAnoPublicacao() {
+        return anoPublicacao;
+    }
+
+    public void setAnoPublicacao(int anoPublicacao) {
+        this.anoPublicacao = anoPublicacao;
+    }
+
     public int getUnidades() {
         return unidades;
     }
@@ -93,12 +115,11 @@ public class LivroDto {
         this.unidadesDisponiveis = unidadesDisponiveis;
     }
 
-    public boolean isLivroAtivo() {
-        return livroAtivo;
+    public String getStatus() {
+        return status;
     }
 
-    public void setLivroAtivo(boolean livroAtivo) {
-        this.livroAtivo = livroAtivo;
+    public void setStatus(String status) {
+        this.status = status;
     }
-
 }
